@@ -62,11 +62,13 @@ def fetch_ec2_instances_and_print():
         running_instances = ec2.instances.filter(Filters=[{
             'Name': 'instance-state-name',
             'Values': ['running']}])
-
+        
         ec2info = defaultdict()
+        b=True
         for instance in running_instances:
             for tag in instance.tags:
                 b = False
+
                 if 'Name' in tag['Key']:
                     name = tag['Value']
                     lTime = instance.launch_time
@@ -81,7 +83,9 @@ def fetch_ec2_instances_and_print():
                         'Launch Time': lt
                     }
                     count = count + 1
-        json_list.append(ec2info)
+        if b==False:
+            json_list.append(ec2info)
+            b=True
 
         total_insatnces = 0
         attributes = ['Name', 'id', 'Type', 'State', 'Private IP', 'Public IP', 'Launch Time']
@@ -95,7 +99,7 @@ def fetch_ec2_instances_and_print():
         print("Total Instances : ", total_insatnces)
 
     print("Total instances in all regions :", count)
-    with open('instances18.json', 'a') as json_file:
+    with open('instances19.json', 'a') as json_file:
         json.dump(json_list, json_file, indent=3)
 
 
